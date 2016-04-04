@@ -1,5 +1,6 @@
 use traits::{Zero, One};
-use std::ops::{Add, Sub, Mul, Div};
+use std::ops::{Add, Sub, Mul, Div, Index, IndexMut};
+use std::slice::{Iter, IterMut};
 
 
 pub struct VectorN<T> {
@@ -19,8 +20,16 @@ impl<T: Zero + Copy> VectorN<T> {
 		}
 	}
 
-	pub fn len(&self) -> usize {
+	pub fn size(&self) -> usize {
 		self.v.len()
+	}
+
+	pub fn iter(&mut self) -> Iter<T> {
+		self.v.iter()
+	}
+
+	pub fn iter_mut(&mut self) -> IterMut<T> {
+		self.v.iter_mut()
 	}
 }
 
@@ -56,6 +65,20 @@ impl<T: Mul<Output=T> + Add<Output=T> + Copy + Zero> VectorN<T> {
 			result = result + *x * *y;
 		}
 		result
+	}
+}
+
+impl<T> Index<usize> for VectorN<T> {
+	type Output = T;
+
+	fn index<'a>(&'a self, index: usize) -> &'a T {
+		&self.v[index]
+	}
+}
+
+impl<T> IndexMut<usize> for VectorN<T> {
+	fn index_mut<'a>(&'a mut self, index: usize) -> &'a mut T {
+		&mut self.v[index]
 	}
 }
 

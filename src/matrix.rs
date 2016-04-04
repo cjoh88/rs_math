@@ -1,6 +1,7 @@
 use traits::{Zero, One};
 use std::ops::{Index, IndexMut, Add, Sub, Mul};
 use std::slice::{Iter};
+use vector::VectorN;
 
 /*TODO 
 Vector multiplication
@@ -133,7 +134,7 @@ impl<T: Zero + One + Clone> Matrix<T> {
 	}
 }
 
-impl<T: Add<Output = T> + Sub<Output = T> + Mul<Output = T> + Copy> Matrix<T> {
+impl<T: Add<Output = T> + Sub<Output = T> + Mul<Output = T> + Copy + Zero> Matrix<T> {
 	pub fn add(&mut self, other: &Matrix<T>) {
 		for (i,x) in self.v.iter_mut().enumerate() {
 			*x = *x + other.v[i]; 
@@ -149,6 +150,15 @@ impl<T: Add<Output = T> + Sub<Output = T> + Mul<Output = T> + Copy> Matrix<T> {
 	pub fn scalar(&mut self, other: T) {
 		for x in self.v.iter_mut() {
 			*x = *x * other;
+		}
+	}
+
+	pub fn mul_vector(&mut self, other: &VectorN<T>) {
+		assert!(self.nrows == other.size());
+		for i in 0..self.nrows {
+			for j in 0..self.ncols {
+				self[(i,j)] = self[(i,j)] * other[i]
+			}
 		}
 	}
 
@@ -278,6 +288,8 @@ impl<'a, T: Mul<Output = T> + Copy> Mul<T> for &'a Matrix<T> {
 		}
 	}
 }
+
+
 /*
 impl<'a, T: Mul<Output = T> + Copy> Mul<&'a Matrix<T>> for T {
 	type Output = Matrix<T>;
