@@ -1,6 +1,6 @@
-mod matrix;
-mod traits;
-mod vector;
+pub mod matrix;
+pub mod traits;
+pub mod vector;
 
 #[cfg(test)]
 mod test {
