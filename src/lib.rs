@@ -1,6 +1,5 @@
-pub mod matrix;
 pub mod traits;
-pub mod vector;
+pub mod linalg;
 
 #[cfg(test)]
 mod test {
